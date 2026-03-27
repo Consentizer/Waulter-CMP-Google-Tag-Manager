@@ -1,5 +1,5 @@
 homepage: "https://waulter.eu"
 documentation: "https://docs.waulter.eu"
 versions:
-  - sha: TODO_REPLACE_WITH_INITIAL_COMMIT_SHA
+  - sha: 8faff797980a26a58b3a8d48bb977dc366f714ed
     changeNotes: "Initial release. Waulter CMP SDK loader with Google Consent Mode v2 support."
