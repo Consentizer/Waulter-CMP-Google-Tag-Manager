@@ -1,0 +1,560 @@
+{
+  "exportFormatVersion": 2,
+  "containerVersion": {
+    "folder": [
+      {
+        "folderId": "1000",
+        "name": "Waulter — Consent Management",
+        "fingerprint": "0"
+      }
+    ],
+    "variable": [
+      {
+        "variableId": "1001",
+        "name": "Waulter_Decision",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "decision"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "variableId": "1002",
+        "name": "Waulter_Purposes",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "purposes"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "variableId": "1003",
+        "name": "Waulter - Web Analytics Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU061\") || purposes.includes(\"PU046\") || purposes.includes(\"PU050\");\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "variableId": "1004",
+        "name": "Waulter - Ads Network Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU047\") || purposes.includes(\"PU051\") || purposes.includes(\"PU054\") || purposes.includes(\"PU058\") || purposes.includes(\"PU059\") || purposes.includes(\"PU061\") || purposes.includes(\"PU072\") || purposes.includes(\"PU073\") || purposes.includes(\"PU074\");\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "variableId": "1005",
+        "name": "Waulter - Advanced Analytics Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU054\");\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "variableId": "1006",
+        "name": "Waulter - AB Testing Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU050\");\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "2001",
+        "name": "Waulter - All Consent Granted",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter_Decision}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "allow"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000"
+      },
+      {
+        "triggerId": "2002",
+        "name": "Waulter - Web Analytics Consent Granted",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Web Analytics Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000"
+      },
+      {
+        "triggerId": "2003",
+        "name": "Waulter - Marketing Services Consent Granted",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Ads Network Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "FIXED: Uses JSM variable check instead of {{Event}} regex match against purpose IDs (which could never match)."
+      },
+      {
+        "triggerId": "2004",
+        "name": "Waulter - AB Testing Consent Granted",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - AB Testing Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "FIXED: Uses JSM variable check instead of {{Event}} regex match against purpose IDs."
+      },
+      {
+        "triggerId": "2005",
+        "name": "Waulter - Decision Changed",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter_Decision}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "undefined"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Fires on page init and consent change. Filters out events where no decision exists yet (decision != undefined)."
+      },
+      {
+        "triggerId": "2006",
+        "name": "Waulter - All Consent Exception",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter_Decision}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "allow"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Blocking trigger: blocks tags when full consent ('allow') has NOT been given. Fires on init + decision change."
+      },
+      {
+        "triggerId": "2007",
+        "name": "Waulter - Web Analytics Exception",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Web Analytics Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Blocking trigger: blocks analytics tags when web analytics purposes are not granted."
+      },
+      {
+        "triggerId": "2008",
+        "name": "Waulter - Marketing Services Exception v1",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Ads Network Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "FIXED: Uses JSM variable check (negated) instead of {{Event}} regex. Blocks marketing tags when ads network purposes are not granted. Kept for backward compatibility alongside v2."
+      },
+      {
+        "triggerId": "2009",
+        "name": "Waulter - Marketing Services Exception v2",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Ads Network Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "ignore_case",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Blocking trigger: regex-based variant. Blocks marketing tags when ads network purposes are not granted. Kept alongside v1 for backward compatibility with existing container migrations."
+      },
+      {
+        "triggerId": "2010",
+        "name": "Waulter - Advanced Analytics Exception",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Advanced Analytics Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Blocking trigger: blocks heatmap/session recording tags when advanced analytics purpose (PU054) is not granted."
+      },
+      {
+        "triggerId": "2011",
+        "name": "Waulter - No Consent (Block GA4)",
+        "type": "TRIGGER_GROUP",
+        "parentFolderId": "1000",
+        "notes": "Composite trigger group. After import, manually add child triggers: Web Analytics Exception + Marketing Services Exception (v1 or v2). Used as a single blocking trigger on GA4 config tags to block all analytics and marketing when no consent is given."
+      }
+    ]
+  }
+}
