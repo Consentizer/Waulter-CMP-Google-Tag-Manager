@@ -168,6 +168,65 @@ ___TEMPLATE_PARAMETERS___
         "canBeEmptyString": true
       }
     ]
+  },
+  {
+    "type": "GROUP",
+    "name": "regionGroup",
+    "displayName": "Region-Specific Consent Defaults",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "PARAM_TABLE",
+        "name": "regionSettings",
+        "displayName": "Region-specific default consent",
+        "paramTableColumns": [
+          {
+            "param": {"type": "TEXT", "name": "region", "displayName": "Region"},
+            "isUnique": true
+          },
+          {
+            "param": {"type": "SELECT", "name": "analyticsStorage", "displayName": "analytics_storage",
+                      "selectItems": [{"value": "denied", "displayValue": "Denied"}, {"value": "granted", "displayValue": "Granted"}]},
+            "isUnique": false
+          },
+          {
+            "param": {"type": "SELECT", "name": "adStorage", "displayName": "ad_storage",
+                      "selectItems": [{"value": "denied", "displayValue": "Denied"}, {"value": "granted", "displayValue": "Granted"}]},
+            "isUnique": false
+          },
+          {
+            "param": {"type": "SELECT", "name": "adPersonalization", "displayName": "ad_personalization",
+                      "selectItems": [{"value": "denied", "displayValue": "Denied"}, {"value": "granted", "displayValue": "Granted"}]},
+            "isUnique": false
+          },
+          {
+            "param": {"type": "SELECT", "name": "adUserData", "displayName": "ad_user_data",
+                      "selectItems": [{"value": "denied", "displayValue": "Denied"}, {"value": "granted", "displayValue": "Granted"}]},
+            "isUnique": false
+          },
+          {
+            "param": {"type": "SELECT", "name": "functionalityStorage", "displayName": "functionality_storage",
+                      "selectItems": [{"value": "denied", "displayValue": "Denied"}, {"value": "granted", "displayValue": "Granted"}]},
+            "isUnique": false
+          },
+          {
+            "param": {"type": "SELECT", "name": "personalizationStorage", "displayName": "personalization_storage",
+                      "selectItems": [{"value": "denied", "displayValue": "Denied"}, {"value": "granted", "displayValue": "Granted"}]},
+            "isUnique": false
+          }
+        ],
+        "help": "Override default consent per region. Use ISO 3166-1 alpha-2 region codes (e.g., 'US', 'DE', 'GB'). If no region matches the visitor, the global default (all denied) is used. Leave empty to use the same defaults worldwide.",
+        "newRowButtonText": "Add region"
+      }
+    ]
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "debugMode",
+    "checkboxText": "Enable debug logging (browser console)",
+    "simpleValueType": true,
+    "defaultValue": false,
+    "help": "When enabled, the template logs detailed consent state changes, WaulterConfig values, and SDK load status to the browser's DevTools console."
   }
 ]
 
@@ -178,10 +237,12 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 // Integrates the Waulter Consent Management Platform with Google Consent Mode v2.
 //
 // Flow:
-// 1. Set default consent state (all denied except security_storage)
-// 2. Configure WaulterConfig on window
-// 3. Inject SDK script
-// 4. SDK handles consent updates via gtag('consent', 'update', ...) natively
+// 1. Set consent mode options (ads_data_redaction, url_passthrough)
+// 2. Set default consent state (all denied except security_storage)
+//    + region-specific overrides if configured
+// 3. Configure WaulterConfig on window
+// 4. Inject SDK script
+// 5. Listen for Waulter:Decision and update consent state (belt-and-suspenders)
 
 const log = require('logToConsole');
 const setDefaultConsentState = require('setDefaultConsentState');
@@ -192,6 +253,8 @@ const copyFromWindow = require('copyFromWindow');
 const gtagSet = require('gtagSet');
 const makeNumber = require('makeNumber');
 const getType = require('getType');
+const addEventCallback = require('addEventCallback');
+const copyFromDataLayer = require('copyFromDataLayer');
 
 // ---------------------------------------------------------------------------
 // 1. Consent Mode options
@@ -219,6 +282,26 @@ setDefaultConsentState({
   security_storage: 'granted',
   wait_for_update: waitMs
 });
+
+// Region-specific overrides
+if (data.regionSettings) {
+  for (var i = 0; i < data.regionSettings.length; i++) {
+    var r = data.regionSettings[i];
+    if (r.region) {
+      setDefaultConsentState({
+        ad_storage: r.adStorage || 'denied',
+        ad_user_data: r.adUserData || 'denied',
+        ad_personalization: r.adPersonalization || 'denied',
+        analytics_storage: r.analyticsStorage || 'denied',
+        functionality_storage: r.functionalityStorage || 'denied',
+        personalization_storage: r.personalizationStorage || 'denied',
+        security_storage: 'granted',
+        wait_for_update: waitMs,
+        region: r.region
+      });
+    }
+  }
+}
 
 // ---------------------------------------------------------------------------
 // 3. Build WaulterConfig
@@ -261,7 +344,9 @@ if (getType(existingConfig) === 'object') {
 
 setInWindow('WaulterConfig', config, true);
 
-log('Waulter CMP: WaulterConfig set', config);
+if (data.debugMode) {
+  log('Waulter CMP: WaulterConfig set', config);
+}
 
 // ---------------------------------------------------------------------------
 // 4. Inject Waulter SDK
@@ -275,12 +360,78 @@ log('Waulter CMP: WaulterConfig set', config);
 var sdkUrl = data.sdkUrl || 'https://cdn.waulter.cz/sdk.js';
 
 injectScript(sdkUrl, function() {
-  log('Waulter CMP: SDK loaded successfully');
+  if (data.debugMode) {
+    log('Waulter CMP: SDK loaded successfully');
+  }
   data.gtmOnSuccess();
 }, function() {
-  log('Waulter CMP: SDK failed to load');
+  if (data.debugMode) {
+    log('Waulter CMP: SDK failed to load');
+  }
   data.gtmOnFailure();
 }, sdkUrl);
+
+// ---------------------------------------------------------------------------
+// 5. Listen for Waulter:Decision and update consent state
+//    Belt-and-suspenders: SDK also calls gtag('consent', 'update') natively
+// ---------------------------------------------------------------------------
+addEventCallback('event', function(containerId, eventData) {
+  var eventName = copyFromDataLayer('event');
+  if (eventName === 'Waulter:Decision') {
+    var purposes = copyFromDataLayer('purposes');
+    var decision = copyFromDataLayer('decision');
+
+    if (getType(purposes) !== 'array') {
+      purposes = [];
+    }
+
+    // Helper: check if purpose is in array
+    var hasPurpose = function(code) {
+      for (var i = 0; i < purposes.length; i++) {
+        if (purposes[i] === code) return true;
+      }
+      return false;
+    };
+
+    // Analytics: PU045-PU052
+    var analyticsGranted = hasPurpose('PU045') || hasPurpose('PU046') ||
+                           hasPurpose('PU047') || hasPurpose('PU048') ||
+                           hasPurpose('PU050') || hasPurpose('PU051') ||
+                           hasPurpose('PU052');
+
+    // Marketing: PU055-PU074
+    var marketingGranted = hasPurpose('PU055') || hasPurpose('PU057') ||
+                           hasPurpose('PU058') || hasPurpose('PU059') ||
+                           hasPurpose('PU061') || hasPurpose('PU063') ||
+                           hasPurpose('PU064') || hasPurpose('PU065') ||
+                           hasPurpose('PU066') || hasPurpose('PU067') ||
+                           hasPurpose('PU071') || hasPurpose('PU072') ||
+                           hasPurpose('PU073') || hasPurpose('PU074');
+
+    // Advanced: PU054
+    var advancedGranted = hasPurpose('PU054');
+
+    // Functionality: decision === 'allow' or has functionality purposes
+    var funcGranted = (decision === 'allow') || (decision === 'Allow');
+
+    // AB/Personalization: PU050
+    var personalizationGranted = hasPurpose('PU050');
+
+    updateConsentState({
+      ad_storage: marketingGranted ? 'granted' : 'denied',
+      ad_user_data: marketingGranted ? 'granted' : 'denied',
+      ad_personalization: marketingGranted ? 'granted' : 'denied',
+      analytics_storage: analyticsGranted ? 'granted' : 'denied',
+      functionality_storage: funcGranted ? 'granted' : 'denied',
+      personalization_storage: personalizationGranted ? 'granted' : 'denied',
+      security_storage: 'granted'
+    });
+
+    if (data.debugMode) {
+      log('Waulter CMP: Consent updated via template callback');
+    }
+  }
+});
 
 
 ___WEB_PERMISSIONS___
@@ -1169,6 +1320,40 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "read_data_layer",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keyPatterns",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "event"
+              },
+              {
+                "type": 1,
+                "string": "decision"
+              },
+              {
+                "type": 1,
+                "string": "purposes"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
   }
 ]
 
@@ -1187,6 +1372,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
 
     let defaultConsentArgs;
     mock('setDefaultConsentState', function(arg) {
@@ -1223,6 +1410,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1255,6 +1444,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1285,6 +1476,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('setInWindow', function() {});
@@ -1318,6 +1511,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1350,6 +1545,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1376,6 +1573,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1410,6 +1609,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1448,6 +1649,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
 
     let defaultConsentArgs;
     mock('setDefaultConsentState', function(arg) {
@@ -1489,6 +1692,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1515,6 +1720,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1545,6 +1752,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1575,6 +1784,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
     mock('setDefaultConsentState', function() {});
     mock('updateConsentState', function() {});
     mock('gtagSet', function() {});
@@ -1601,6 +1812,8 @@ scenarios:
     };
 
     mock('logToConsole', function() {});
+    mock('addEventCallback', function() {});
+    mock('copyFromDataLayer', function() { return undefined; });
 
     let defaultConsentArgs;
     mock('setDefaultConsentState', function(arg) {

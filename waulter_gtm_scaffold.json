@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-03-30 12:00:00",
+  "exportTime": "2026-03-30 14:00:00",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -63,7 +63,7 @@
           "consentStatus": "NOT_SET"
         },
         "parentFolderId": "1000",
-        "notes": "Writes consent state to localStorage and cookie on every Waulter:Decision event."
+        "notes": "Writes consent state to localStorage and cookie on every Waulter:Decision."
       }
     ],
     "trigger": [
@@ -73,7 +73,6 @@
         "triggerId": "2001",
         "name": "Waulter - All Consent Granted",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -108,7 +107,8 @@
             ]
           }
         ],
-        "notes": "Core: fires when user grants ALL consent (decision contains 'allow')."
+        "parentFolderId": "1000",
+        "notes": "Core: fires when user grants ALL consent."
       },
       {
         "accountId": "0",
@@ -116,7 +116,6 @@
         "triggerId": "2002",
         "name": "Waulter - All Consent Exception",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -156,7 +155,8 @@
             ]
           }
         ],
-        "notes": "Core: blocks tags when full consent ('allow') has NOT been given."
+        "parentFolderId": "1000",
+        "notes": "Core: blocks tags when full consent not given."
       },
       {
         "accountId": "0",
@@ -164,7 +164,6 @@
         "triggerId": "2003",
         "name": "Waulter - Decision Changed",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -204,7 +203,8 @@
             ]
           }
         ],
-        "notes": "Core: fires on page init and consent change. Filters out events where no decision exists yet."
+        "parentFolderId": "1000",
+        "notes": "Core: fires on page init and consent change."
       },
       {
         "accountId": "0",
@@ -212,7 +212,6 @@
         "triggerId": "2004",
         "name": "Waulter - [PC002] Analytics & Optimization Category Granted",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -247,7 +246,8 @@
             ]
           }
         ],
-        "notes": "Category PC002: fires tags when ANY analytics & optimization purpose is accepted."
+        "parentFolderId": "1000",
+        "notes": "Category PC002: fires when ANY analytics & optimization purpose is accepted."
       },
       {
         "accountId": "0",
@@ -255,7 +255,6 @@
         "triggerId": "2005",
         "name": "Waulter - [PC002] Analytics & Optimization Category Exception",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -290,15 +289,15 @@
             ]
           }
         ],
-        "notes": "Category PC002: blocks tags when NO analytics & optimization purpose is accepted."
+        "parentFolderId": "1000",
+        "notes": "Category PC002: blocks when NO analytics & optimization purpose is accepted."
       },
       {
         "accountId": "0",
         "containerId": "0",
         "triggerId": "2006",
-        "name": "Waulter - [PC006] Other & Advanced Tracking Category Granted",
+        "name": "Waulter - [PC003] Website Functionality Category Granted",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -323,7 +322,7 @@
               {
                 "type": "TEMPLATE",
                 "key": "arg0",
-                "value": "{{Waulter - [PC006] Other & Advanced Tracking Category Allowed}}"
+                "value": "{{Waulter - [PC003] Website Functionality Category Allowed}}"
               },
               {
                 "type": "TEMPLATE",
@@ -333,15 +332,101 @@
             ]
           }
         ],
-        "notes": "Category PC006: fires tags when ANY other & advanced tracking purpose is accepted."
+        "parentFolderId": "1000",
+        "notes": "Category PC003: fires when ANY website functionality purpose is accepted."
       },
       {
         "accountId": "0",
         "containerId": "0",
         "triggerId": "2007",
+        "name": "Waulter - [PC003] Website Functionality Category Exception",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - [PC003] Website Functionality Category Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Category PC003: blocks when NO website functionality purpose is accepted."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2008",
+        "name": "Waulter - [PC006] Other & Advanced Tracking Category Granted",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - [PC006] Other & Advanced Tracking Category Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Category PC006: fires when ANY other & advanced tracking purpose is accepted."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2009",
         "name": "Waulter - [PC006] Other & Advanced Tracking Category Exception",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -376,101 +461,101 @@
             ]
           }
         ],
-        "notes": "Category PC006: blocks tags when NO other & advanced tracking purpose is accepted."
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "2008",
-        "name": "Waulter - [PC008] Marketing Category Granted",
-        "type": "CUSTOM_EVENT",
         "parentFolderId": "1000",
-        "customEventFilter": [
-          {
-            "type": "MATCH_REGEX",
-            "parameter": [
-              {
-                "type": "TEMPLATE",
-                "key": "arg0",
-                "value": "{{_event}}"
-              },
-              {
-                "type": "TEMPLATE",
-                "key": "arg1",
-                "value": "Waulter:Decision"
-              }
-            ]
-          }
-        ],
-        "filter": [
-          {
-            "type": "EQUALS",
-            "parameter": [
-              {
-                "type": "TEMPLATE",
-                "key": "arg0",
-                "value": "{{Waulter - [PC008] Marketing Category Allowed}}"
-              },
-              {
-                "type": "TEMPLATE",
-                "key": "arg1",
-                "value": "true"
-              }
-            ]
-          }
-        ],
-        "notes": "Category PC008: fires tags when ANY marketing purpose is accepted."
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "2009",
-        "name": "Waulter - [PC008] Marketing Category Exception",
-        "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
-        "customEventFilter": [
-          {
-            "type": "MATCH_REGEX",
-            "parameter": [
-              {
-                "type": "TEMPLATE",
-                "key": "arg0",
-                "value": "{{_event}}"
-              },
-              {
-                "type": "TEMPLATE",
-                "key": "arg1",
-                "value": "^gtm\\.(init|js)$|Waulter:Decision"
-              }
-            ]
-          }
-        ],
-        "filter": [
-          {
-            "type": "EQUALS",
-            "parameter": [
-              {
-                "type": "TEMPLATE",
-                "key": "arg0",
-                "value": "{{Waulter - [PC008] Marketing Category Allowed}}"
-              },
-              {
-                "type": "TEMPLATE",
-                "key": "arg1",
-                "value": "false"
-              }
-            ]
-          }
-        ],
-        "notes": "Category PC008: blocks tags when NO marketing purpose is accepted."
+        "notes": "Category PC006: blocks when NO other & advanced tracking purpose is accepted."
       },
       {
         "accountId": "0",
         "containerId": "0",
         "triggerId": "2010",
+        "name": "Waulter - [PC008] Marketing Category Granted",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - [PC008] Marketing Category Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Category PC008: fires when ANY marketing purpose is accepted."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2011",
+        "name": "Waulter - [PC008] Marketing Category Exception",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "MATCH_REGEX",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - [PC008] Marketing Category Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1000",
+        "notes": "Category PC008: blocks when NO marketing purpose is accepted."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2012",
         "name": "Waulter - AB Testing Granted",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -505,15 +590,15 @@
             ]
           }
         ],
-        "notes": "Purpose-level: fires A/B testing tags when PU050 is specifically accepted."
+        "parentFolderId": "1000",
+        "notes": "Purpose-level: fires when PU050 accepted."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "triggerId": "2011",
+        "triggerId": "2013",
         "name": "Waulter - AB Testing Exception",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -548,15 +633,15 @@
             ]
           }
         ],
-        "notes": "Purpose-level: blocks A/B testing tags when PU050 is not accepted."
+        "parentFolderId": "1000",
+        "notes": "Purpose-level: blocks when PU050 not accepted."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "triggerId": "2012",
+        "triggerId": "2014",
         "name": "Waulter - Marketing Services Exception v1",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -596,15 +681,15 @@
             ]
           }
         ],
-        "notes": "Backward compat: EQUALS-based marketing exception. Kept for existing container migrations."
+        "parentFolderId": "1000",
+        "notes": "Backward compat: EQUALS-based marketing exception."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "triggerId": "2013",
+        "triggerId": "2015",
         "name": "Waulter - Marketing Services Exception v2",
         "type": "CUSTOM_EVENT",
-        "parentFolderId": "1000",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
@@ -649,16 +734,17 @@
             ]
           }
         ],
-        "notes": "Backward compat: REGEX-based marketing exception. Kept for existing container migrations."
+        "parentFolderId": "1000",
+        "notes": "Backward compat: REGEX-based marketing exception."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "triggerId": "2014",
+        "triggerId": "2016",
         "name": "Waulter - No Consent (Block GA4)",
         "type": "TRIGGER_GROUP",
         "parentFolderId": "1000",
-        "notes": "Composite trigger group. After import, manually add: [PC002] Analytics & Optimization Category Exception + [PC008] Marketing Category Exception."
+        "notes": "Composite. Add child triggers: [PC002] Analytics Exception + [PC008] Marketing Exception."
       }
     ],
     "variable": [
@@ -718,6 +804,87 @@
         "accountId": "0",
         "containerId": "0",
         "variableId": "1003",
+        "name": "Waulter - [PC001] Cookie Management Category Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU016\") > -1 ||\n           purposes.indexOf(\"PU023\") > -1 ||\n           purposes.indexOf(\"PU024\") > -1 ||\n           purposes.indexOf(\"PU096\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {},
+        "notes": "C011 PC001 — Cookie Management. Technical purposes, always granted. No triggers needed."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1004",
+        "name": "Waulter - Auto Privacy Settings (PU016)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU016\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1005",
+        "name": "Waulter - Cookie Settings Management (PU023)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU023\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1006",
+        "name": "Waulter - Cookie Usage Analysis (PU024)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU024\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1007",
+        "name": "Waulter - Privacy Settings Records (PU096)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU096\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1008",
         "name": "Waulter - [PC002] Analytics & Optimization Category Allowed",
         "type": "jsm",
         "parameter": [
@@ -729,12 +896,12 @@
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC002 — Website Improvement & Optimization. True if ANY analytics purpose is accepted. Controls tags requiring analytics_storage."
+        "notes": "C011 PC002 — Website Improvement & Optimization. Controls tags requiring analytics_storage."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1004",
+        "variableId": "1009",
         "name": "Waulter - Individual Behavior Analysis (PU045)",
         "type": "jsm",
         "parameter": [
@@ -750,7 +917,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1005",
+        "variableId": "1010",
         "name": "Waulter - Web Analytics (PU046)",
         "type": "jsm",
         "parameter": [
@@ -766,7 +933,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1006",
+        "variableId": "1011",
         "name": "Waulter - Traffic Source Analysis (PU047)",
         "type": "jsm",
         "parameter": [
@@ -782,7 +949,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1007",
+        "variableId": "1012",
         "name": "Waulter - System & Device Analysis (PU048)",
         "type": "jsm",
         "parameter": [
@@ -798,7 +965,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1008",
+        "variableId": "1013",
         "name": "Waulter - AB Testing (PU050)",
         "type": "jsm",
         "parameter": [
@@ -814,7 +981,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1009",
+        "variableId": "1014",
         "name": "Waulter - Conversion Tracking (PU051)",
         "type": "jsm",
         "parameter": [
@@ -830,7 +997,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1010",
+        "variableId": "1015",
         "name": "Waulter - Payment Analytics (PU052)",
         "type": "jsm",
         "parameter": [
@@ -846,24 +1013,329 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1011",
+        "variableId": "1016",
+        "name": "Waulter - [PC003] Website Functionality Category Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU025\") > -1 ||\n           purposes.indexOf(\"PU026\") > -1 ||\n           purposes.indexOf(\"PU027\") > -1 ||\n           purposes.indexOf(\"PU028\") > -1 ||\n           purposes.indexOf(\"PU029\") > -1 ||\n           purposes.indexOf(\"PU031\") > -1 ||\n           purposes.indexOf(\"PU032\") > -1 ||\n           purposes.indexOf(\"PU034\") > -1 ||\n           purposes.indexOf(\"PU035\") > -1 ||\n           purposes.indexOf(\"PU036\") > -1 ||\n           purposes.indexOf(\"PU037\") > -1 ||\n           purposes.indexOf(\"PU038\") > -1 ||\n           purposes.indexOf(\"PU075\") > -1 ||\n           purposes.indexOf(\"PU095\") > -1 ||\n           purposes.indexOf(\"PU097\") > -1 ||\n           purposes.indexOf(\"PU098\") > -1 ||\n           purposes.indexOf(\"PU100\") > -1 ||\n           purposes.indexOf(\"PU101\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {},
+        "notes": "C011 PC003 — Website Functionality. Controls tags requiring functionality_storage, personalization_storage."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1017",
+        "name": "Waulter - Shopping Cart Memory (PU025)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU025\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1018",
+        "name": "Waulter - Form Simplification (PU026)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU026\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1019",
+        "name": "Waulter - Function Preferences (PU027)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU027\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1020",
+        "name": "Waulter - Content Personalization (PU028)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU028\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1021",
+        "name": "Waulter - Login Credentials Memory (PU029)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU029\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1022",
+        "name": "Waulter - Registration & Login (PU031)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU031\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1023",
+        "name": "Waulter - Third-Party Login (PU032)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU032\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1024",
+        "name": "Waulter - YouTube Video Playback (PU034)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU034\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1025",
+        "name": "Waulter - Payment Method Storage (PU035)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU035\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1026",
+        "name": "Waulter - Payment Security (PU036)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU036\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1027",
+        "name": "Waulter - Automation Platforms (PU037)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU037\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1028",
+        "name": "Waulter - Online Chat (PU038)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU038\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1029",
+        "name": "Waulter - Product Comparison (PU075)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU075\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1030",
+        "name": "Waulter - Communication & Forms (PU095)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU095\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1031",
+        "name": "Waulter - Content Display & Delivery (PU097)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU097\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1032",
+        "name": "Waulter - Payment Processing (PU098)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU098\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1033",
+        "name": "Waulter - Advanced Search & Personalization (PU100)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU100\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1034",
+        "name": "Waulter - Feedback & Experience Analysis (PU101)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU101\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1035",
         "name": "Waulter - [PC004] Website Security Category Allowed",
         "type": "jsm",
         "parameter": [
           {
             "type": "TEMPLATE",
             "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU081\") > -1;\n  }\n  return false;\n}"
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU039\") > -1 ||\n           purposes.indexOf(\"PU040\") > -1 ||\n           purposes.indexOf(\"PU081\") > -1;\n  }\n  return false;\n}"
           }
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC004 — Website Security. Non-technical security purposes only. No trigger pair (too granular)."
+        "notes": "C011 PC004 — Website Security. Includes PU039, PU040 (technical), PU081."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1012",
+        "variableId": "1036",
         "name": "Waulter - Other Security (PU081)",
         "type": "jsm",
         "parameter": [
@@ -879,8 +1351,40 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1013",
-        "name": "Waulter - Service Provision (PU099)",
+        "variableId": "1066",
+        "name": "Waulter - Spam Detection (PU039)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU039\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1067",
+        "name": "Waulter - Fraud Detection (PU040)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU040\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1037",
+        "name": "Waulter - [PC005] Service Provision Category Allowed",
         "type": "jsm",
         "parameter": [
           {
@@ -891,29 +1395,45 @@
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC005 — Service Provision. Single purpose, no category variable needed."
+        "notes": "C011 PC005 — Service Provision. No triggers (single purpose)."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1014",
+        "variableId": "1038",
+        "name": "Waulter - Service Provision (PU099)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU099\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1039",
         "name": "Waulter - [PC006] Other & Advanced Tracking Category Allowed",
         "type": "jsm",
         "parameter": [
           {
             "type": "TEMPLATE",
             "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU054\") > -1 ||\n           purposes.indexOf(\"PU068\") > -1 ||\n           purposes.indexOf(\"PU076\") > -1;\n  }\n  return false;\n}"
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU054\") > -1 ||\n           purposes.indexOf(\"PU068\") > -1 ||\n           purposes.indexOf(\"PU069\") > -1 ||\n           purposes.indexOf(\"PU070\") > -1 ||\n           purposes.indexOf(\"PU076\") > -1;\n  }\n  return false;\n}"
           }
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC006 — Other / Advanced Individual Tracking. True if any advanced tracking purpose is accepted. Controls tags requiring analytics_storage (heatmaps, recordings)."
+        "notes": "C011 PC006 — Other / Advanced Individual Tracking. Includes PU054, PU068, PU069 (technical), PU070 (technical), PU076."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1015",
+        "variableId": "1040",
         "name": "Waulter - Heatmaps & Recordings (PU054)",
         "type": "jsm",
         "parameter": [
@@ -929,7 +1449,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1016",
+        "variableId": "1041",
         "name": "Waulter - Risk Scoring (PU068)",
         "type": "jsm",
         "parameter": [
@@ -945,7 +1465,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1017",
+        "variableId": "1042",
         "name": "Waulter - Propensity Scoring (PU076)",
         "type": "jsm",
         "parameter": [
@@ -961,7 +1481,39 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1018",
+        "variableId": "1068",
+        "name": "Waulter - Fraud Prevention (PU069)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU069\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1069",
+        "name": "Waulter - Risk Analysis (PU070)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU070\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1043",
         "name": "Waulter - [PC007] Website Monitoring Category Allowed",
         "type": "jsm",
         "parameter": [
@@ -973,12 +1525,12 @@
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC007 — Website Monitoring. Functional monitoring purposes. No trigger pair (functional category)."
+        "notes": "C011 PC007 — Website Monitoring. Functional monitoring. No triggers."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1019",
+        "variableId": "1044",
         "name": "Waulter - Error Detection (PU041)",
         "type": "jsm",
         "parameter": [
@@ -994,7 +1546,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1020",
+        "variableId": "1045",
         "name": "Waulter - Payment Process Improvement (PU042)",
         "type": "jsm",
         "parameter": [
@@ -1010,7 +1562,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1021",
+        "variableId": "1046",
         "name": "Waulter - Server Performance (PU043)",
         "type": "jsm",
         "parameter": [
@@ -1026,7 +1578,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1022",
+        "variableId": "1047",
         "name": "Waulter - Network Traffic Monitoring (PU044)",
         "type": "jsm",
         "parameter": [
@@ -1042,7 +1594,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1023",
+        "variableId": "1048",
         "name": "Waulter - Session & Page Settings (PU102)",
         "type": "jsm",
         "parameter": [
@@ -1058,7 +1610,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1024",
+        "variableId": "1049",
         "name": "Waulter - [PC008] Marketing Category Allowed",
         "type": "jsm",
         "parameter": [
@@ -1070,12 +1622,12 @@
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC008 — Marketing. True if ANY marketing purpose is accepted. Controls tags requiring ad_storage, ad_personalization, ad_user_data."
+        "notes": "C011 PC008 — Marketing. Controls tags requiring ad_storage, ad_personalization, ad_user_data."
       },
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1025",
+        "variableId": "1050",
         "name": "Waulter - Social Media Interaction (PU055)",
         "type": "jsm",
         "parameter": [
@@ -1091,7 +1643,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1026",
+        "variableId": "1051",
         "name": "Waulter - User Behavior Tracking (PU057)",
         "type": "jsm",
         "parameter": [
@@ -1107,7 +1659,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1027",
+        "variableId": "1052",
         "name": "Waulter - Display Advertising (PU058)",
         "type": "jsm",
         "parameter": [
@@ -1123,7 +1675,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1028",
+        "variableId": "1053",
         "name": "Waulter - Personalized Advertising (PU059)",
         "type": "jsm",
         "parameter": [
@@ -1139,7 +1691,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1029",
+        "variableId": "1054",
         "name": "Waulter - Ad Campaign Measurement (PU061)",
         "type": "jsm",
         "parameter": [
@@ -1155,7 +1707,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1030",
+        "variableId": "1055",
         "name": "Waulter - Offer Optimization (PU063)",
         "type": "jsm",
         "parameter": [
@@ -1171,7 +1723,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1031",
+        "variableId": "1056",
         "name": "Waulter - Social Media Monitoring (PU064)",
         "type": "jsm",
         "parameter": [
@@ -1187,7 +1739,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1032",
+        "variableId": "1057",
         "name": "Waulter - Phone Marketing (PU065)",
         "type": "jsm",
         "parameter": [
@@ -1203,7 +1755,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1033",
+        "variableId": "1058",
         "name": "Waulter - Affiliate Marketing (PU066)",
         "type": "jsm",
         "parameter": [
@@ -1219,7 +1771,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1034",
+        "variableId": "1059",
         "name": "Waulter - Cross-Site Tracking (PU067)",
         "type": "jsm",
         "parameter": [
@@ -1235,7 +1787,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1035",
+        "variableId": "1060",
         "name": "Waulter - External Ad Display (PU071)",
         "type": "jsm",
         "parameter": [
@@ -1251,7 +1803,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1036",
+        "variableId": "1061",
         "name": "Waulter - Retargeting (PU072)",
         "type": "jsm",
         "parameter": [
@@ -1267,7 +1819,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1037",
+        "variableId": "1062",
         "name": "Waulter - Remarketing (PU073)",
         "type": "jsm",
         "parameter": [
@@ -1283,7 +1835,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1038",
+        "variableId": "1063",
         "name": "Waulter - Email Marketing (PU074)",
         "type": "jsm",
         "parameter": [
@@ -1299,8 +1851,8 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "1039",
-        "name": "Waulter - Guest Management CRM (PU094)",
+        "variableId": "1064",
+        "name": "Waulter - [PC009] Customer Records CRM Category Allowed",
         "type": "jsm",
         "parameter": [
           {
@@ -1311,7 +1863,23 @@
         ],
         "parentFolderId": "1000",
         "formatValue": {},
-        "notes": "C011 PC009 — Customer Records (CRM). Single purpose, no category variable needed."
+        "notes": "C011 PC009 — Customer Records (CRM). No triggers (single purpose)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1065",
+        "name": "Waulter - Guest Management CRM (PU094)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU094\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
       }
     ],
     "folder": [
@@ -1324,285 +1892,5 @@
       }
     ],
     "fingerprint": "0"
-  },
-  "_commented_out": [
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — purposes are nearly always granted, variable is always true.",
-      "name": "Waulter - [PC003] Website Functionality Category Allowed",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU025\") > -1 ||\n           purposes.indexOf(\"PU026\") > -1 ||\n           purposes.indexOf(\"PU027\") > -1 ||\n           purposes.indexOf(\"PU028\") > -1 ||\n           purposes.indexOf(\"PU029\") > -1 ||\n           purposes.indexOf(\"PU031\") > -1 ||\n           purposes.indexOf(\"PU032\") > -1 ||\n           purposes.indexOf(\"PU034\") > -1 ||\n           purposes.indexOf(\"PU035\") > -1 ||\n           purposes.indexOf(\"PU036\") > -1 ||\n           purposes.indexOf(\"PU037\") > -1 ||\n           purposes.indexOf(\"PU038\") > -1 ||\n           purposes.indexOf(\"PU075\") > -1 ||\n           purposes.indexOf(\"PU095\") > -1 ||\n           purposes.indexOf(\"PU097\") > -1 ||\n           purposes.indexOf(\"PU098\") > -1 ||\n           purposes.indexOf(\"PU100\") > -1 ||\n           purposes.indexOf(\"PU101\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Shopping Cart Memory (PU025)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU025\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Form Simplification (PU026)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU026\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Function Preferences (PU027)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU027\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Content Personalization (PU028)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU028\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Login Credentials Memory (PU029)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU029\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Registration & Login (PU031)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU031\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Third-Party Login (PU032)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU032\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - YouTube Video Playback (PU034)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU034\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Payment Method Storage (PU035)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU035\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Payment Security (PU036)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU036\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Automation Platforms (PU037)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU037\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Online Chat (PU038)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU038\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Product Comparison (PU075)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU075\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Communication & Forms (PU095)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU095\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Content Display & Delivery (PU097)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU097\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Payment Processing (PU098)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU098\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Advanced Search & Personalization (PU100)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU100\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "variable",
-      "_reason": "PC003 Website Functionality — commented out (always granted).",
-      "name": "Waulter - Feedback & Experience Analysis (PU101)",
-      "type": "jsm",
-      "parameter": [
-        {
-          "type": "TEMPLATE",
-          "key": "javascript",
-          "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU101\") > -1;\n  }\n  return false;\n}"
-        }
-      ],
-      "parentFolderId": "1000"
-    },
-    {
-      "_type": "trigger",
-      "_reason": "PC003 — commented out.",
-      "name": "Waulter - [PC003] Website Functionality Category Granted",
-      "type": "CUSTOM_EVENT"
-    },
-    {
-      "_type": "trigger",
-      "_reason": "PC003 — commented out.",
-      "name": "Waulter - [PC003] Website Functionality Category Exception",
-      "type": "CUSTOM_EVENT"
-    }
-  ]
+  }
 }
