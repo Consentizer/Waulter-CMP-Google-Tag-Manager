@@ -803,6 +803,266 @@
       {
         "accountId": "0",
         "containerId": "0",
+        "variableId": "1070",
+        "name": "Waulter - Custom Field 1",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField1"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1071",
+        "name": "Waulter - Custom Field 2",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField2"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1072",
+        "name": "Waulter - Custom Field 3",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField3"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1073",
+        "name": "Waulter - Custom Field 4",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField4"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1074",
+        "name": "Waulter - Custom Field 5",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField5"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1075",
+        "name": "Waulter - Custom Field 6",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField6"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1076",
+        "name": "Waulter - Custom Field 7",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField7"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1077",
+        "name": "Waulter - Custom Field 8",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField8"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1078",
+        "name": "Waulter - Custom Field 9",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField9"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1079",
+        "name": "Waulter - Custom Field 10",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "customField10"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
         "variableId": "1003",
         "name": "Waulter - [PC001] Cookie Management Category Allowed",
         "type": "jsm",
