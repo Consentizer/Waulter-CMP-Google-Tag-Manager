@@ -93,9 +93,32 @@ Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion 
 | Wait for Update | `waitForUpdate` | Number | No | `500` | Milliseconds to wait for consent update before firing tags |
 | Debug Mode | `debug` | Checkbox | No | Unchecked | Enable SDK debug logging to browser console |
 | Language | `lang` | Text | No | — | Language code for banner localisation (e.g., `cs`, `en`, `de`) |
-| Custom Field 1–10 | `customField1`–`customField10` | Text | No | — | Custom context values for scenario rule evaluation |
+| Custom Field 1–10 | `customField1`–`customField10` | Text | No | `{{Waulter - Custom Field N}}` | Custom context values for scenario rule evaluation. Defaults to scaffold DLV for auto-lookup (see below). |
 
 > **Note:** Consent duration settings (`defaultAllowDuration`, `defaultMixedDuration`, `defaultRejectDuration`) are reserved for a future release. Consent durations are currently managed server-side in your Waulter configuration.
+
+### Custom Fields Auto-Lookup
+
+When the [companion scaffold](waulter_gtm_scaffold.json) is imported, custom fields work **automatically** without additional GTM configuration. Each template field defaults to a scaffold Data Layer Variable (`{{Waulter - Custom Field 1}}` through `{{Waulter - Custom Field 10}}`), which reads values set by the scaffold's Custom Fields Loader tag.
+
+**How it works:** Your website sets a value in localStorage or a cookie using the standard key naming convention (`waulter_cf1` through `waulter_cf10`). The Loader tag reads the value, pushes it to the dataLayer, the DLV picks it up, and the template passes it to `WaulterConfig` — all automatically.
+
+```javascript
+// On your website — set a custom field value
+localStorage.setItem('waulter_cf1', 'premium');
+// That's it — the value flows automatically to scenario rules
+```
+
+**Key naming convention:**
+
+| Field | localStorage / Cookie Key | Scaffold DLV |
+|-------|--------------------------|--------------|
+| Custom Field 1 | `waulter_cf1` | `{{Waulter - Custom Field 1}}` |
+| Custom Field 2 | `waulter_cf2` | `{{Waulter - Custom Field 2}}` |
+| ... | ... | ... |
+| Custom Field 10 | `waulter_cf10` | `{{Waulter - Custom Field 10}}` |
+
+**Priority:** If you replace a field's default DLV reference with a static value or different GTM variable, that override takes highest priority. Otherwise: localStorage > cookie.
 
 ## Google Consent Mode v2 Mapping
 
