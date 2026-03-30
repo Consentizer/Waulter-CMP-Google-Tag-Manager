@@ -64,14 +64,15 @@ In each tag's advanced settings, set **Consent Settings** to require the appropr
 
 **Approach B — Custom Triggers using dataLayer events:**
 
-Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion file contains pre-built Waulter consent variables and triggers. Import it into your GTM container to get ready-made consent gating for non-Google tags.
+Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion file contains pre-built Waulter consent variables and triggers (41 variables + 22 triggers + 1 tag, covering 50 purposes across 9 categories). Import it into your GTM container to get ready-made consent gating for non-Google tags.
 
 | Trigger | Fires When |
 |---------|------------|
-| `Consent_Decision_Allow` | User accepts all purposes |
-| `Web analytics allowed` | User grants analytics purposes |
-| `Marketing services allowed` | User grants marketing/ad purposes |
-| `A/B testing allowed` | User grants A/B testing purpose |
+| `Waulter - All Consent Granted` | User accepts all purposes |
+| `Waulter - Analytics & Optimization Granted` | User grants analytics purposes |
+| `Waulter - Marketing Granted` | User grants marketing/ad purposes |
+| `Waulter - Advanced Tracking Granted` | User grants advanced tracking purposes |
+| `Waulter - AB Testing Granted` | User grants A/B testing purpose |
 
 ### Step 5: Preview and Publish
 
@@ -152,14 +153,14 @@ The mapping between purposes and Google consent signals is configured server-sid
 
 The template and all Gallery-facing names use English. If your GTM container uses Czech or Slovak naming conventions, here is a mapping of common trigger and variable names:
 
-| English Name | Czech Equivalent |
-|-------------|-----------------|
-| Consent Decision Allow | Consent_Decision_Allow |
-| Web analytics allowed | Waulter - web analysis allowed? |
-| Marketing services allowed | Waulter - Ads network allowed? |
-| A/B testing allowed | Waulter - AB testing allowed? |
-| Consent Decision | Waulter - Decision |
-| Accepted Purposes | Waulter - Purposes |
+| Scaffold Name (English) | Legacy Czech Equivalent |
+|------------------------|------------------------|
+| `Waulter - All Consent Granted` | `Consent_Decision_Allow` |
+| `Waulter - Analytics & Optimization Category Allowed` | `Waulter - web analysis allowed?` |
+| `Waulter - Marketing Category Allowed` | `Waulter - Ads network allowed?` |
+| `Waulter - AB Testing (PU050)` | `Waulter - AB testing allowed?` |
+| `Waulter - Decision` | `Waulter_Decision` |
+| `Waulter - Purposes` | `Waulter_Purposes` |
 
 ## Troubleshooting
 
