@@ -45,6 +45,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
+    "defaultValue": "SC00000",
     "alwaysInSummary": true,
     "notSetText": "Enter your Waulter ID"
   },
@@ -256,6 +257,8 @@ const getType = require('getType');
 const addEventCallback = require('addEventCallback');
 const copyFromDataLayer = require('copyFromDataLayer');
 
+log('Waulter CMP: Initializing with ID: ' + data.waulterId);
+
 // ---------------------------------------------------------------------------
 // 1. Consent Mode options
 // ---------------------------------------------------------------------------
@@ -360,14 +363,10 @@ if (data.debugMode) {
 var sdkUrl = data.sdkUrl || 'https://cdn.waulter.cz/sdk.js';
 
 injectScript(sdkUrl, function() {
-  if (data.debugMode) {
-    log('Waulter CMP: SDK loaded successfully');
-  }
+  log('Waulter CMP: SDK script loaded. Waiting for initialization...');
   data.gtmOnSuccess();
 }, function() {
-  if (data.debugMode) {
-    log('Waulter CMP: SDK failed to load');
-  }
+  log('Waulter CMP: SDK failed to load');
   data.gtmOnFailure();
 }, sdkUrl);
 
@@ -375,7 +374,7 @@ injectScript(sdkUrl, function() {
 // 5. Listen for Waulter:Decision and update consent state
 //    Belt-and-suspenders: SDK also calls gtag('consent', 'update') natively
 // ---------------------------------------------------------------------------
-addEventCallback('event', function(containerId, eventData) {
+addEventCallback(function(containerId, eventData) {
   var eventName = copyFromDataLayer('event');
   if (eventName === 'Waulter:Decision') {
     var purposes = copyFromDataLayer('purposes');
@@ -427,8 +426,10 @@ addEventCallback('event', function(containerId, eventData) {
       security_storage: 'granted'
     });
 
-    if (data.debugMode) {
-      log('Waulter CMP: Consent updated via template callback');
+    log('Waulter CMP: Consent updated — decision: ' + decision + ', purposes: ' + purposes.length + ' granted');
+
+    if (purposes.length === 0 && decision !== 'reject') {
+      log('Waulter CMP: WARNING — Waulter:Decision received but no purposes granted and decision is not reject. Check your Waulter ID (' + data.waulterId + ') and domain whitelist.');
     }
   }
 });
