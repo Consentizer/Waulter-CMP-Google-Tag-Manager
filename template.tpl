@@ -39,13 +39,14 @@ ___TEMPLATE_PARAMETERS___
     "name": "waulterId",
     "displayName": "Waulter ID (CCID or Scenario ID)",
     "simpleValueType": true,
-    "help": "You can use either scenario (recommended) to link the Waulter configuration, or address directly selected configuration (Config ID - CCIDxxxx).\n\nExample of Waulter Scenario ID is SC000XX and you will find it in the Waulter B2B selfcare portal (my.waulter.eu/b2b) under scenario section, where you create \u0026 manage the scenarios.\n\nThe Configuration ID (e.g. CCIDXXXX) is placed inside of each configuration in the \"implementation\" section.",
+    "help": "Your Waulter configuration identifier. Two formats are supported:\n\n• Scenario ID (recommended): SC followed by 5 digits — e.g., SC00009, SC00045, SC00123\n• Configuration ID (CCID): CCID followed by 5 digits — e.g., CCID00034, CCID00042\n\nYou will find the Scenario ID in the Waulter B2B selfcare portal (my.waulter.eu/b2b) under the Scenarios section. The Configuration ID (CCID) is in each configuration's Implementation section.\n\nScenario ID is recommended — it allows dynamic configuration switching via scenario rules.",
     "valueValidators": [
       {
         "type": "NON_EMPTY"
       }
     ],
     "defaultValue": "SC00000",
+    "valueHint": "SC00045",
     "alwaysInSummary": true,
     "notSetText": "Enter your Waulter ID"
   },
@@ -96,13 +97,14 @@ ___TEMPLATE_PARAMETERS___
     "name": "customFieldsGroup",
     "displayName": "Custom Fields (Scenario Targeting)",
     "groupStyle": "ZIPPY_CLOSED",
-    "help": "Custom fields are used for dynamic scenario targeting. Values can be static text or GTM variables or you can load from localStorage or cookies via custom script. Use this to pass context information from your website/dataLayer to Waulter scenario logic. Configure scenarios at my.waulter.eu/b2b/scenarios/. Leave blank if not needed.",
+    "help": "Custom fields pass context to Waulter scenario rules for dynamic configuration switching. Configure scenarios at my.waulter.eu/b2b/scenarios/.\n\nBy default, each field reads from the Waulter scaffold's data layer variables, which are automatically populated from localStorage (key: waulter_cf1 through waulter_cf10) and cookies (same names).\n\nTo set custom field values on your site:\n• localStorage: localStorage.setItem('waulter_cf1', 'premium')\n• Cookie: set cookie named 'waulter_cf1'\n• Or override with any GTM variable or static text\n\nPriority: Template field value > localStorage > Cookie\n\nLeave blank to use automatic lookup, or type a value/GTM variable to override.",
     "subParams": [
       {
         "type": "TEXT",
         "name": "customField1",
         "displayName": "Custom Field 1",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 1}}",
         "canBeEmptyString": true
       },
       {
@@ -110,6 +112,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField2",
         "displayName": "Custom Field 2",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 2}}",
         "canBeEmptyString": true
       },
       {
@@ -117,6 +120,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField3",
         "displayName": "Custom Field 3",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 3}}",
         "canBeEmptyString": true
       },
       {
@@ -124,6 +128,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField4",
         "displayName": "Custom Field 4",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 4}}",
         "canBeEmptyString": true
       },
       {
@@ -131,6 +136,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField5",
         "displayName": "Custom Field 5",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 5}}",
         "canBeEmptyString": true
       },
       {
@@ -138,6 +144,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField6",
         "displayName": "Custom Field 6",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 6}}",
         "canBeEmptyString": true
       },
       {
@@ -145,6 +152,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField7",
         "displayName": "Custom Field 7",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 7}}",
         "canBeEmptyString": true
       },
       {
@@ -152,6 +160,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField8",
         "displayName": "Custom Field 8",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 8}}",
         "canBeEmptyString": true
       },
       {
@@ -159,6 +168,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField9",
         "displayName": "Custom Field 9",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 9}}",
         "canBeEmptyString": true
       },
       {
@@ -166,6 +176,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField10",
         "displayName": "Custom Field 10",
         "simpleValueType": true,
+        "defaultValue": "{{Waulter - Custom Field 10}}",
         "canBeEmptyString": true
       }
     ]

@@ -47,7 +47,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script>\n(function() {\n  var dl = window.dataLayer || [];\n  var lastEvent = null;\n  for (var i = dl.length - 1; i >= 0; i--) {\n    if (dl[i] && dl[i].event === 'Waulter:Decision') {\n      lastEvent = dl[i];\n      break;\n    }\n  }\n  if (!lastEvent) return;\n  var state = {\n    decision: lastEvent.decision || '',\n    purposes: lastEvent.purposes || [],\n    timestamp: new Date().toISOString()\n  };\n  var stateJson = JSON.stringify(state);\n  try { localStorage.setItem('waulter_consent', stateJson); } catch(e) {}\n  try {\n    var expires = new Date();\n    expires.setDate(expires.getDate() + 90);\n    document.cookie = 'waulter_consent=' + encodeURIComponent(stateJson) +\n      ';expires=' + expires.toUTCString() + ';path=/;SameSite=Lax';\n  } catch(e) {}\n})();\n</script>"
+            "value": "<script>\n(function() {\n  var dl = window.dataLayer || [];\n  var lastEvent = null;\n\n  // Find the most recent Waulter:Decision in dataLayer\n  for (var i = dl.length - 1; i >= 0; i--) {\n    if (dl[i] && dl[i].event === 'Waulter:Decision') {\n      lastEvent = dl[i];\n      break;\n    }\n  }\n\n  var state;\n  if (lastEvent) {\n    // We have a decision — save it\n    state = {\n      decision: lastEvent.decision || '',\n      purposes: lastEvent.purposes || [],\n      timestamp: new Date().toISOString(),\n      status: 'decided'\n    };\n  } else {\n    // No decision yet — save default state\n    state = {\n      decision: '',\n      purposes: [],\n      timestamp: new Date().toISOString(),\n      status: 'pending'\n    };\n  }\n\n  var stateJson = JSON.stringify(state);\n\n  // Write to localStorage\n  try {\n    localStorage.setItem('waulter_consent', stateJson);\n  } catch(e) {}\n\n  // Write to cookie (90 day expiry)\n  try {\n    var expires = new Date();\n    expires.setDate(expires.getDate() + 90);\n    document.cookie = 'waulter_consent=' + encodeURIComponent(stateJson) +\n      ';expires=' + expires.toUTCString() +\n      ';path=/;SameSite=Lax';\n  } catch(e) {}\n})();\n</script>"
           },
           {
             "type": "BOOLEAN",
@@ -56,6 +56,7 @@
           }
         ],
         "firingTriggerId": [
+          "2017",
           "2003"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
@@ -63,7 +64,35 @@
           "consentStatus": "NOT_SET"
         },
         "parentFolderId": "1000",
-        "notes": "Writes consent state to localStorage and cookie on every Waulter:Decision."
+        "notes": "Writes consent state to localStorage and cookie. Fires on page load (default/pending) and on every Waulter:Decision (decided)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "3002",
+        "name": "Waulter - Custom Fields Loader (localStorage + Cookie)",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\n(function() {\n  var fields = {};\n\n  for (var i = 1; i <= 10; i++) {\n    var key = 'waulter_cf' + i;\n    var dlKey = 'customField' + i;\n    var value = null;\n\n    // Priority 1: localStorage\n    try {\n      value = localStorage.getItem(key);\n    } catch(e) {}\n\n    // Priority 2: cookie\n    if (!value) {\n      try {\n        var cookies = document.cookie.split(';');\n        for (var j = 0; j < cookies.length; j++) {\n          var c = cookies[j].trim();\n          if (c.indexOf(key + '=') === 0) {\n            value = decodeURIComponent(c.substring(key.length + 1));\n            break;\n          }\n        }\n      } catch(e) {}\n    }\n\n    if (value) {\n      fields[dlKey] = value;\n    }\n  }\n\n  // Push to dataLayer so DLV variables can read them\n  if (Object.keys(fields).length > 0) {\n    window.dataLayer = window.dataLayer || [];\n    window.dataLayer.push(fields);\n  }\n})();\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "2147479572"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        },
+        "parentFolderId": "1000",
+        "notes": "Reads custom field values (waulter_cf1-cf10) from localStorage/cookies and pushes to dataLayer. Fires on Consent Initialization (before SDK tag)."
       }
     ],
     "trigger": [
@@ -745,6 +774,15 @@
         "type": "TRIGGER_GROUP",
         "parentFolderId": "1000",
         "notes": "Composite. Add child triggers: [PC002] Analytics Exception + [PC008] Marketing Exception."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2017",
+        "name": "Waulter - Page Load (All Pages)",
+        "type": "PAGEVIEW",
+        "parentFolderId": "1000",
+        "notes": "Fires on all page views. Used by Consent State Sync tag to save default state on page load."
       }
     ],
     "variable": [
