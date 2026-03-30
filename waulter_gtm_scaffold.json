@@ -1,223 +1,75 @@
 {
   "exportFormatVersion": 2,
+  "exportTime": "2026-03-27 12:00:00",
   "containerVersion": {
-    "folder": [
-      {
-        "folderId": "1000",
-        "name": "Waulter — Consent Management",
-        "fingerprint": "0"
-      }
-    ],
-    "variable": [
-      {
-        "variableId": "1001",
-        "name": "Waulter_Decision",
-        "type": "v",
-        "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "decision" }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {}
+    "path": "accounts/0/containers/0/versions/0",
+    "accountId": "0",
+    "containerId": "0",
+    "containerVersionId": "0",
+    "container": {
+      "path": "accounts/0/containers/0",
+      "accountId": "0",
+      "containerId": "0",
+      "name": "Waulter Consent Management Scaffold",
+      "publicId": "GTM-SCAFFOLD",
+      "usageContext": [
+        "WEB"
+      ],
+      "fingerprint": "0",
+      "features": {
+        "supportUserPermissions": true,
+        "supportEnvironments": true,
+        "supportWorkspaces": true,
+        "supportGtagConfigs": false,
+        "supportBuiltInVariables": true,
+        "supportClients": false,
+        "supportFolders": true,
+        "supportTags": true,
+        "supportTemplates": true,
+        "supportTriggers": true,
+        "supportVariables": true,
+        "supportVersions": true,
+        "supportZones": true,
+        "supportTransformations": false
       },
+      "tagIds": [
+        "GTM-SCAFFOLD"
+      ]
+    },
+    "tag": [
       {
-        "variableId": "1002",
-        "name": "Waulter_Purposes",
-        "type": "v",
-        "parameter": [
-          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
-          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
-          { "type": "TEMPLATE", "key": "name", "value": "purposes" }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {}
-      },
-
-      {
-        "variableId": "1010",
-        "name": "Waulter - Analytics & Optimization Allowed",
-        "type": "jsm",
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "3001",
+        "name": "Waulter - Consent State Sync (localStorage + Cookie)",
+        "type": "html",
         "parameter": [
           {
             "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (!Array.isArray(purposes)) return false;\n  var analytics = [\"PU045\",\"PU046\",\"PU047\",\"PU048\",\"PU050\",\"PU051\",\"PU052\"];\n  for (var i = 0; i < purposes.length; i++) {\n    if (analytics.indexOf(purposes[i]) !== -1) return true;\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Category 5 — Website Improvement & Optimization. True if ANY analytics purpose is accepted. Includes: PU045 Individual behavior analysis, PU046 Aggregate web analytics (GA4), PU047 Traffic source analysis, PU048 System/device analysis, PU050 A/B testing, PU051 Conversion tracking, PU052 Payment process analysis. googleCategory: analytics_storage."
-      },
-      {
-        "variableId": "1011",
-        "name": "Waulter - Marketing Allowed",
-        "type": "jsm",
-        "parameter": [
+            "key": "html",
+            "value": "<script>\n(function() {\n  var dl = window.dataLayer || [];\n  var lastEvent = null;\n  \n  // Find the most recent Waulter:Decision in dataLayer\n  for (var i = dl.length - 1; i >= 0; i--) {\n    if (dl[i] && dl[i].event === 'Waulter:Decision') {\n      lastEvent = dl[i];\n      break;\n    }\n  }\n  \n  if (!lastEvent) return;\n  \n  var state = {\n    decision: lastEvent.decision || '',\n    purposes: lastEvent.purposes || [],\n    timestamp: new Date().toISOString()\n  };\n  \n  var stateJson = JSON.stringify(state);\n  \n  // Write to localStorage\n  try {\n    localStorage.setItem('waulter_consent', stateJson);\n  } catch(e) {}\n  \n  // Write to cookie (90 day expiry)\n  try {\n    var expires = new Date();\n    expires.setDate(expires.getDate() + 90);\n    document.cookie = 'waulter_consent=' + encodeURIComponent(stateJson) + \n      ';expires=' + expires.toUTCString() + \n      ';path=/;SameSite=Lax';\n  } catch(e) {}\n})();\n</script>"
+          },
           {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (!Array.isArray(purposes)) return false;\n  var marketing = [\"PU055\",\"PU057\",\"PU058\",\"PU059\",\"PU061\",\"PU063\",\"PU064\",\"PU065\",\"PU066\",\"PU067\",\"PU071\",\"PU072\",\"PU073\",\"PU074\"];\n  for (var i = 0; i < purposes.length; i++) {\n    if (marketing.indexOf(purposes[i]) !== -1) return true;\n  }\n  return false;\n}"
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
           }
         ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Category 7 — Marketing. True if ANY marketing purpose is accepted. Includes: PU055 Social media interaction, PU057 Behavior tracking, PU058 Display ads, PU059 Personalized ads, PU061 Ad campaign measurement, PU063 Offer optimization, PU064 Social monitoring, PU065 Phone marketing, PU066 Affiliate, PU067 Cross-site tracking, PU071 External ads, PU072 Retargeting data, PU073 Remarketing, PU074 Email marketing. googleCategory: ad_storage, ad_personalization."
-      },
-      {
-        "variableId": "1012",
-        "name": "Waulter - Advanced Tracking Allowed",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU054\");\n  }\n  return false;\n}"
-          }
+        "firingTriggerId": [
+          "2003"
         ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        },
         "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Category 6 — Other (Advanced Individual Tracking). True if PU054 (heatmaps, session recordings) is accepted. googleCategory: functionality_storage, analytics_storage, security_storage."
-      },
-      {
-        "variableId": "1013",
-        "name": "Waulter - Functionality Allowed",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (!Array.isArray(purposes)) return false;\n  var functional = [\"PU025\",\"PU026\",\"PU027\",\"PU028\",\"PU029\",\"PU030\",\"PU031\",\"PU032\",\"PU033\",\"PU034\",\"PU035\",\"PU036\",\"PU037\",\"PU038\",\"PU041\",\"PU042\",\"PU043\",\"PU044\",\"PU075\",\"PU095\",\"PU096\",\"PU097\",\"PU098\",\"PU099\",\"PU100\",\"PU101\",\"PU102\"];\n  for (var i = 0; i < purposes.length; i++) {\n    if (functional.indexOf(purposes[i]) !== -1) return true;\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Categories 2+4 — Website Functionality + Website Monitoring. True if ANY functional/monitoring purpose is accepted. Covers chat widgets, language preferences, accessibility, session monitoring, error tracking, etc. googleCategory: functionality_storage, security_storage, personalization_storage."
-      },
-
-      {
-        "variableId": "1020",
-        "name": "Waulter - PU046 Web Analytics",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU046\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU046 — Aggregate web analytics (e.g., GA4 page views, audience reports). googleCategory: analytics_storage."
-      },
-      {
-        "variableId": "1021",
-        "name": "Waulter - PU050 AB Testing",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU050\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU050 — A/B testing and experimentation (e.g., Google Optimize, VWO). googleCategory: analytics_storage, functionality_storage, personalization_storage."
-      },
-      {
-        "variableId": "1022",
-        "name": "Waulter - PU051 Conversion Tracking",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU051\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU051 — Conversion tracking and measurement. googleCategory: analytics_storage, ad_user_data, web_analytics, sledovani_konverzi."
-      },
-      {
-        "variableId": "1023",
-        "name": "Waulter - PU054 Heatmaps & Recordings",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU054\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU054 — Heatmaps and session recordings (e.g., Hotjar, Smartlook). googleCategory: functionality_storage, analytics_storage, security_storage."
-      },
-      {
-        "variableId": "1024",
-        "name": "Waulter - PU061 Ad Campaign Measurement",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU061\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU061 — Ad campaign performance measurement (Marketing category, NOT analytics). googleCategory: ad_storage, ad_personalization, analytics_storage."
-      },
-      {
-        "variableId": "1025",
-        "name": "Waulter - PU072 Retargeting",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU072\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU072 — Data sharing for retargeting (e.g., Facebook Custom Audiences). googleCategory: ad_personalization, ad_storage."
-      },
-      {
-        "variableId": "1026",
-        "name": "Waulter - PU073 Remarketing",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU073\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU073 — Remarketing and retargeting ads (e.g., Google Ads remarketing lists). googleCategory: ad_personalization, ad_storage."
-      },
-      {
-        "variableId": "1027",
-        "name": "Waulter - PU074 Email Marketing",
-        "type": "jsm",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "javascript",
-            "value": "function() {\n  var purposes = {{Waulter_Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.includes(\"PU074\");\n  }\n  return false;\n}"
-          }
-        ],
-        "parentFolderId": "1000",
-        "formatValue": {},
-        "notes": "Purpose-level: PU074 — Email marketing tracking. googleCategory: ad_storage."
+        "notes": "Writes consent state (decision, purposes, timestamp) to localStorage and cookie on every Waulter:Decision event. Fires regardless of consent status."
       }
     ],
     "trigger": [
       {
+        "accountId": "0",
+        "containerId": "0",
         "triggerId": "2001",
         "name": "Waulter - All Consent Granted",
         "type": "CUSTOM_EVENT",
@@ -225,8 +77,16 @@
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
             ]
           }
         ],
@@ -234,8 +94,16 @@
           {
             "type": "CONTAINS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter_Decision}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "allow" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Decision}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "allow"
+              }
             ]
           }
         ],
@@ -243,6 +111,8 @@
         "notes": "Core: fires when user grants ALL consent (decision contains 'allow')."
       },
       {
+        "accountId": "0",
+        "containerId": "0",
         "triggerId": "2002",
         "name": "Waulter - All Consent Exception",
         "type": "CUSTOM_EVENT",
@@ -250,8 +120,16 @@
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -259,16 +137,30 @@
           {
             "type": "CONTAINS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter_Decision}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "allow" },
-              { "type": "BOOLEAN", "key": "negate", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Decision}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "allow"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Core: blocks tags when full consent ('allow') has NOT been given. Fires on init + decision change."
+        "notes": "Core: blocks tags when full consent ('allow') has NOT been given."
       },
       {
+        "accountId": "0",
+        "containerId": "0",
         "triggerId": "2003",
         "name": "Waulter - Decision Changed",
         "type": "CUSTOM_EVENT",
@@ -276,8 +168,16 @@
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -285,26 +185,47 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter_Decision}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "undefined" },
-              { "type": "BOOLEAN", "key": "negate", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Decision}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "undefined"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
         "notes": "Core: fires on page init and consent change. Filters out events where no decision exists yet."
       },
-
       {
-        "triggerId": "2010",
-        "name": "Waulter - Analytics Consent Granted",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2004",
+        "name": "Waulter - Analytics & Optimization Granted",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
             ]
           }
         ],
@@ -312,24 +233,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Analytics & Optimization Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Analytics & Optimization Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Category 5: fires analytics/optimization tags when ANY analytics purpose is accepted (PU045-PU052)."
+        "notes": "Category: fires tags when ANY analytics & optimization purpose is accepted."
       },
       {
-        "triggerId": "2011",
-        "name": "Waulter - Analytics Exception",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2005",
+        "name": "Waulter - Analytics & Optimization Exception",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -337,24 +276,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Analytics & Optimization Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "false" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Analytics & Optimization Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Category 5: blocks analytics tags when NO analytics/optimization purpose is accepted."
+        "notes": "Category: blocks tags when NO analytics & optimization purpose is accepted."
       },
       {
-        "triggerId": "2012",
-        "name": "Waulter - Marketing Consent Granted",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2006",
+        "name": "Waulter - Marketing Granted",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
             ]
           }
         ],
@@ -362,24 +319,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Marketing Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Marketing Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Category 7: fires marketing tags when ANY marketing purpose is accepted (PU055-PU074)."
+        "notes": "Category: fires tags when ANY marketing purpose is accepted."
       },
       {
-        "triggerId": "2013",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2007",
         "name": "Waulter - Marketing Exception",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -387,24 +362,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Marketing Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "false" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Marketing Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Category 7: blocks marketing tags when NO marketing purpose is accepted."
+        "notes": "Category: blocks tags when NO marketing purpose is accepted."
       },
       {
-        "triggerId": "2014",
-        "name": "Waulter - Advanced Tracking Consent Granted",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2008",
+        "name": "Waulter - Advanced Tracking Granted",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
             ]
           }
         ],
@@ -412,24 +405,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Advanced Tracking Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Advanced Tracking Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Category 6: fires advanced tracking tags when PU054 (heatmaps, session recordings) is accepted."
+        "notes": "Category: fires tags when ANY advanced tracking purpose is accepted."
       },
       {
-        "triggerId": "2015",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2009",
         "name": "Waulter - Advanced Tracking Exception",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -437,24 +448,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Advanced Tracking Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "false" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Advanced Tracking Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Category 6: blocks heatmap/recording tags when PU054 is not accepted."
+        "notes": "Category: blocks tags when NO advanced tracking purpose is accepted."
       },
       {
-        "triggerId": "2016",
-        "name": "Waulter - Functionality Consent Granted",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2010",
+        "name": "Waulter - Functionality Granted",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
             ]
           }
         ],
@@ -462,24 +491,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Functionality Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Functionality Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Categories 2+4: fires functional tags when ANY functionality/monitoring purpose is accepted (chat widgets, preferences, error tracking, etc.)."
+        "notes": "Category: fires tags when ANY functionality purpose is accepted."
       },
       {
-        "triggerId": "2017",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2011",
         "name": "Waulter - Functionality Exception",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -487,25 +534,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Functionality Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "false" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Functionality Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Categories 2+4: blocks functional tags when NO functionality/monitoring purpose is accepted."
+        "notes": "Category: blocks tags when NO functionality purpose is accepted."
       },
-
       {
-        "triggerId": "2020",
-        "name": "Waulter - AB Testing Consent Granted",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2012",
+        "name": "Waulter - AB Testing Granted",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "Waulter:Decision"
+              }
             ]
           }
         ],
@@ -513,24 +577,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - PU050 AB Testing}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - AB Testing (PU050)}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Purpose-level: fires A/B testing tags when PU050 is specifically accepted. Finer control than Analytics category trigger."
+        "notes": "Purpose-level: fires A/B testing tags when PU050 is specifically accepted."
       },
       {
-        "triggerId": "2021",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2013",
         "name": "Waulter - AB Testing Exception",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -538,25 +620,42 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - PU050 AB Testing}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "false" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - AB Testing (PU050)}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "false"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
         "notes": "Purpose-level: blocks A/B testing tags when PU050 is not accepted."
       },
-
       {
-        "triggerId": "2030",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2014",
         "name": "Waulter - Marketing Services Exception v1",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -564,25 +663,47 @@
           {
             "type": "EQUALS",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Marketing Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" },
-              { "type": "BOOLEAN", "key": "negate", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Marketing Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Backward compat: EQUALS-based marketing exception. Functionally same as Marketing Exception but kept for existing container migrations."
+        "notes": "Backward compat: EQUALS-based marketing exception. Kept for existing container migrations."
       },
       {
-        "triggerId": "2031",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2015",
         "name": "Waulter - Marketing Services Exception v2",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "^gtm\\.(init|js)$|Waulter:Decision" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "^gtm\\.(init|js)$|Waulter:Decision"
+              }
             ]
           }
         ],
@@ -590,24 +711,973 @@
           {
             "type": "MATCH_REGEX",
             "parameter": [
-              { "type": "TEMPLATE", "key": "arg0", "value": "{{Waulter - Marketing Allowed}}" },
-              { "type": "TEMPLATE", "key": "arg1", "value": "true" },
-              { "type": "BOOLEAN", "key": "ignore_case", "value": "true" },
-              { "type": "BOOLEAN", "key": "negate", "value": "true" }
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Waulter - Marketing Allowed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "ignore_case",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
             ]
           }
         ],
         "parentFolderId": "1000",
-        "notes": "Backward compat: REGEX-based marketing exception. Functionally same as Marketing Exception but kept for existing container migrations."
+        "notes": "Backward compat: REGEX-based marketing exception. Kept for existing container migrations."
       },
-
       {
-        "triggerId": "2040",
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "2016",
         "name": "Waulter - No Consent (Block GA4)",
         "type": "TRIGGER_GROUP",
         "parentFolderId": "1000",
-        "notes": "Composite trigger group. After import, manually add child triggers: Analytics Exception + Marketing Exception. Used as a single blocking trigger on GA4 config tags."
+        "notes": "Composite trigger group. After import, manually add child triggers: Analytics & Optimization Exception + Marketing Exception."
       }
-    ]
+    ],
+    "variable": [
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1001",
+        "name": "Waulter - Decision",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "decision"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1002",
+        "name": "Waulter - Purposes",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "purposes"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1003",
+        "name": "Waulter - Analytics & Optimization Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU045\") > -1 ||\n           purposes.indexOf(\"PU046\") > -1 ||\n           purposes.indexOf(\"PU047\") > -1 ||\n           purposes.indexOf(\"PU048\") > -1 ||\n           purposes.indexOf(\"PU050\") > -1 ||\n           purposes.indexOf(\"PU051\") > -1 ||\n           purposes.indexOf(\"PU052\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {},
+        "notes": "Category 5 — Website Improvement & Optimization. True if ANY analytics purpose is accepted. Controls tags requiring analytics_storage."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1004",
+        "name": "Waulter - Marketing Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU055\") > -1 ||\n           purposes.indexOf(\"PU057\") > -1 ||\n           purposes.indexOf(\"PU058\") > -1 ||\n           purposes.indexOf(\"PU059\") > -1 ||\n           purposes.indexOf(\"PU061\") > -1 ||\n           purposes.indexOf(\"PU063\") > -1 ||\n           purposes.indexOf(\"PU064\") > -1 ||\n           purposes.indexOf(\"PU065\") > -1 ||\n           purposes.indexOf(\"PU066\") > -1 ||\n           purposes.indexOf(\"PU067\") > -1 ||\n           purposes.indexOf(\"PU071\") > -1 ||\n           purposes.indexOf(\"PU072\") > -1 ||\n           purposes.indexOf(\"PU073\") > -1 ||\n           purposes.indexOf(\"PU074\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {},
+        "notes": "Category 7 — Marketing. True if ANY marketing purpose is accepted. Controls tags requiring ad_storage, ad_personalization, ad_user_data."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1005",
+        "name": "Waulter - Advanced Tracking Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU054\") > -1 ||\n           purposes.indexOf(\"PU068\") > -1 ||\n           purposes.indexOf(\"PU076\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {},
+        "notes": "Category 6 — Other (Advanced Individual Tracking). True if ANY advanced tracking purpose is accepted. Controls tags requiring analytics_storage (heatmaps, recordings)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1006",
+        "name": "Waulter - Functionality Allowed",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU025\") > -1 ||\n           purposes.indexOf(\"PU026\") > -1 ||\n           purposes.indexOf(\"PU027\") > -1 ||\n           purposes.indexOf(\"PU028\") > -1 ||\n           purposes.indexOf(\"PU029\") > -1 ||\n           purposes.indexOf(\"PU031\") > -1 ||\n           purposes.indexOf(\"PU032\") > -1 ||\n           purposes.indexOf(\"PU034\") > -1 ||\n           purposes.indexOf(\"PU035\") > -1 ||\n           purposes.indexOf(\"PU036\") > -1 ||\n           purposes.indexOf(\"PU037\") > -1 ||\n           purposes.indexOf(\"PU038\") > -1 ||\n           purposes.indexOf(\"PU041\") > -1 ||\n           purposes.indexOf(\"PU042\") > -1 ||\n           purposes.indexOf(\"PU043\") > -1 ||\n           purposes.indexOf(\"PU044\") > -1 ||\n           purposes.indexOf(\"PU075\") > -1 ||\n           purposes.indexOf(\"PU081\") > -1 ||\n           purposes.indexOf(\"PU095\") > -1 ||\n           purposes.indexOf(\"PU097\") > -1 ||\n           purposes.indexOf(\"PU098\") > -1 ||\n           purposes.indexOf(\"PU099\") > -1 ||\n           purposes.indexOf(\"PU100\") > -1 ||\n           purposes.indexOf(\"PU101\") > -1 ||\n           purposes.indexOf(\"PU102\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {},
+        "notes": "Categories 2+3+4 — Website Functionality, Security & Monitoring. True if ANY functional purpose is accepted. Controls tags requiring functionality_storage, personalization_storage."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1007",
+        "name": "Waulter - Shopping Cart Memory (PU025)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU025\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1008",
+        "name": "Waulter - Form Simplification (PU026)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU026\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1009",
+        "name": "Waulter - Function Preferences (PU027)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU027\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1010",
+        "name": "Waulter - Content Personalization (PU028)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU028\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1011",
+        "name": "Waulter - Login Credentials Memory (PU029)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU029\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1012",
+        "name": "Waulter - Registration & Login (PU031)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU031\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1013",
+        "name": "Waulter - Third-Party Login (PU032)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU032\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1014",
+        "name": "Waulter - YouTube Video Playback (PU034)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU034\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1015",
+        "name": "Waulter - Payment Method Storage (PU035)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU035\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1016",
+        "name": "Waulter - Payment Security (PU036)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU036\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1017",
+        "name": "Waulter - Automation Platforms (PU037)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU037\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1018",
+        "name": "Waulter - Online Chat (PU038)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU038\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1019",
+        "name": "Waulter - Error Detection (PU041)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU041\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1020",
+        "name": "Waulter - Payment Process Improvement (PU042)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU042\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1021",
+        "name": "Waulter - Server Performance (PU043)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU043\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1022",
+        "name": "Waulter - Network Traffic Monitoring (PU044)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU044\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1023",
+        "name": "Waulter - Individual Behavior Analysis (PU045)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU045\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1024",
+        "name": "Waulter - Web Analytics (PU046)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU046\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1025",
+        "name": "Waulter - Traffic Source Analysis (PU047)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU047\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1026",
+        "name": "Waulter - System & Device Analysis (PU048)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU048\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1027",
+        "name": "Waulter - AB Testing (PU050)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU050\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1028",
+        "name": "Waulter - Conversion Tracking (PU051)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU051\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1029",
+        "name": "Waulter - Payment Analytics (PU052)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU052\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1030",
+        "name": "Waulter - Heatmaps & Recordings (PU054)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU054\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1031",
+        "name": "Waulter - Social Media Interaction (PU055)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU055\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1032",
+        "name": "Waulter - User Behavior Tracking (PU057)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU057\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1033",
+        "name": "Waulter - Display Advertising (PU058)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU058\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1034",
+        "name": "Waulter - Personalized Advertising (PU059)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU059\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1035",
+        "name": "Waulter - Ad Campaign Measurement (PU061)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU061\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1036",
+        "name": "Waulter - Offer Optimization (PU063)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU063\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1037",
+        "name": "Waulter - Social Media Monitoring (PU064)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU064\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1038",
+        "name": "Waulter - Phone Marketing (PU065)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU065\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1039",
+        "name": "Waulter - Affiliate Marketing (PU066)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU066\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1040",
+        "name": "Waulter - Cross-Site Tracking (PU067)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU067\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1041",
+        "name": "Waulter - Risk Scoring (PU068)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU068\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1042",
+        "name": "Waulter - External Ad Display (PU071)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU071\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1043",
+        "name": "Waulter - Retargeting (PU072)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU072\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1044",
+        "name": "Waulter - Remarketing (PU073)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU073\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1045",
+        "name": "Waulter - Email Marketing (PU074)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU074\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1046",
+        "name": "Waulter - Product Comparison (PU075)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU075\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1047",
+        "name": "Waulter - Propensity Scoring (PU076)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU076\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1048",
+        "name": "Waulter - Other Security (PU081)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU081\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1049",
+        "name": "Waulter - Guest Management CRM (PU094)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU094\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1050",
+        "name": "Waulter - Communication & Forms (PU095)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU095\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1051",
+        "name": "Waulter - Content Display & Delivery (PU097)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU097\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1052",
+        "name": "Waulter - Payment Processing (PU098)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU098\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1053",
+        "name": "Waulter - Service Provision (PU099)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU099\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1054",
+        "name": "Waulter - Advanced Search & Personalization (PU100)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU100\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1055",
+        "name": "Waulter - Feedback & Experience Analysis (PU101)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU101\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "1056",
+        "name": "Waulter - Session & Page Settings (PU102)",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  var purposes = {{Waulter - Purposes}};\n  if (Array.isArray(purposes)) {\n    return purposes.indexOf(\"PU102\") > -1;\n  }\n  return false;\n}"
+          }
+        ],
+        "parentFolderId": "1000",
+        "formatValue": {}
+      }
+    ],
+    "folder": [
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "folderId": "1000",
+        "name": "Waulter — Consent Management",
+        "fingerprint": "0"
+      }
+    ],
+    "fingerprint": "0"
   }
 }

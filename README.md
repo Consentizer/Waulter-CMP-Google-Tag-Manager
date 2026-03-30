@@ -64,7 +64,7 @@ In each tag's advanced settings, set **Consent Settings** to require the appropr
 
 **Approach B — Custom Triggers using dataLayer events:**
 
-Import the [Waulter GTM scaffold](https://docs.waulter.eu) which provides pre-built triggers and variables:
+Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion file contains pre-built Waulter consent variables and triggers. Import it into your GTM container to get ready-made consent gating for non-Google tags.
 
 | Trigger | Fires When |
 |---------|------------|
@@ -158,8 +158,8 @@ The template and all Gallery-facing names use English. If your GTM container use
 | Web analytics allowed | Waulter - web analysis allowed? |
 | Marketing services allowed | Waulter - Ads network allowed? |
 | A/B testing allowed | Waulter - AB testing allowed? |
-| Consent Decision | Waulter_Decision |
-| Accepted Purposes | Waulter_Purposes |
+| Consent Decision | Waulter - Decision |
+| Accepted Purposes | Waulter - Purposes |
 
 ## Troubleshooting
 
