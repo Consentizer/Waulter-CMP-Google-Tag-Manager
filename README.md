@@ -43,7 +43,7 @@ A Google Tag Manager (GTM) Community Template for **Waulter automatic GDPR AI as
    - **Waulter ID (CCID or Scenario ID)** — your Scenario ID (e.g., `SC00045`) or CCID
 4. Optionally configure:
    - SDK URL (defaults to `https://cdn.waulter.cz/sdk.js`)
-   - Advanced consent management settings (wait for update, debug, language)
+   - Advanced consent management settings (wait for update, debug)
    - Custom fields for scenario targeting
 5. Click **Save**
 
@@ -64,7 +64,7 @@ In each tag's advanced settings, set **Consent Settings** to require the appropr
 
 **Approach B — Custom Triggers using dataLayer events:**
 
-Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion file contains pre-built Waulter consent variables and triggers (41 variables + 22 triggers + 1 tag, covering 50 purposes across 9 categories). Import it into your GTM container to get ready-made consent gating for non-Google tags.
+Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion file contains pre-built Waulter consent variables and triggers (79 variables + 17 triggers + 2 tags = 98 items, covering 50 purposes across 9 categories). Import it into your GTM container to get ready-made consent gating for non-Google tags.
 
 | Trigger | Fires When |
 |---------|------------|
@@ -92,7 +92,6 @@ Import the [Waulter GTM scaffold](waulter_gtm_scaffold.json) — this companion 
 | SDK URL | `sdkUrl` | Text | No | `https://cdn.waulter.cz/sdk.js` | SDK script URL. Change only for dev/staging environments |
 | Wait for Update | `waitForUpdate` | Number | No | `500` | Milliseconds to wait for consent update before firing tags |
 | Debug Mode | `debug` | Checkbox | No | Unchecked | Enable SDK debug logging to browser console |
-| Language | `lang` | Text | No | — | Language code for banner localisation (e.g., `cs`, `en`, `de`) |
 | Custom Field 1–10 | `customField1`–`customField10` | Text | No | `{{Waulter - Custom Field N}}` | Custom context values for scenario rule evaluation. Defaults to scaffold DLV for auto-lookup (see below). |
 
 > **Note:** Consent duration settings (`defaultAllowDuration`, `defaultMixedDuration`, `defaultRejectDuration`) are reserved for a future release. Consent durations are currently managed server-side in your Waulter configuration.
@@ -179,8 +178,8 @@ The template and all Gallery-facing names use English. If your GTM container use
 | Scaffold Name (English) | Legacy Czech Equivalent |
 |------------------------|------------------------|
 | `Waulter - All Consent Granted` | `Consent_Decision_Allow` |
-| `Waulter - Analytics & Optimization Category Allowed` | `Waulter - web analysis allowed?` |
-| `Waulter - Marketing Category Allowed` | `Waulter - Ads network allowed?` |
+| `Waulter - [PC005] Analytics & Optimization Category Allowed` | `Waulter - web analysis allowed?` |
+| `Waulter - [PC007] Marketing Category Allowed` | `Waulter - Ads network allowed?` |
 | `Waulter - AB Testing (PU050)` | `Waulter - AB testing allowed?` |
 | `Waulter - Decision` | `Waulter_Decision` |
 | `Waulter - Purposes` | `Waulter_Purposes` |

@@ -273,6 +273,10 @@ log('Waulter CMP: Initializing with ID: ' + data.waulterId);
 // ---------------------------------------------------------------------------
 // 1. Consent Mode options
 // ---------------------------------------------------------------------------
+if (data.debugMode) {
+  log('Waulter CMP: Setting ads_data_redaction = ' + data.adsDataRedaction);
+  log('Waulter CMP: Setting url_passthrough = ' + data.urlPassthrough);
+}
 gtagSet('ads_data_redaction', data.adsDataRedaction);
 gtagSet('url_passthrough', data.urlPassthrough);
 
