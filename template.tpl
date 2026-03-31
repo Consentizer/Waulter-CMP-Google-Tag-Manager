@@ -104,7 +104,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField1",
         "displayName": "Custom Field 1",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 1}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 1}}",
         "canBeEmptyString": true
       },
       {
@@ -112,7 +113,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField2",
         "displayName": "Custom Field 2",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 2}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 2}}",
         "canBeEmptyString": true
       },
       {
@@ -120,7 +122,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField3",
         "displayName": "Custom Field 3",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 3}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 3}}",
         "canBeEmptyString": true
       },
       {
@@ -128,7 +131,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField4",
         "displayName": "Custom Field 4",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 4}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 4}}",
         "canBeEmptyString": true
       },
       {
@@ -136,7 +140,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField5",
         "displayName": "Custom Field 5",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 5}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 5}}",
         "canBeEmptyString": true
       },
       {
@@ -144,7 +149,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField6",
         "displayName": "Custom Field 6",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 6}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 6}}",
         "canBeEmptyString": true
       },
       {
@@ -152,7 +158,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField7",
         "displayName": "Custom Field 7",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 7}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 7}}",
         "canBeEmptyString": true
       },
       {
@@ -160,7 +167,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField8",
         "displayName": "Custom Field 8",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 8}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 8}}",
         "canBeEmptyString": true
       },
       {
@@ -168,7 +176,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField9",
         "displayName": "Custom Field 9",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 9}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 9}}",
         "canBeEmptyString": true
       },
       {
@@ -176,7 +185,8 @@ ___TEMPLATE_PARAMETERS___
         "name": "customField10",
         "displayName": "Custom Field 10",
         "simpleValueType": true,
-        "defaultValue": "{{Waulter - Custom Field 10}}",
+        "defaultValue": "",
+        "valueHint": "{{Waulter - Custom Field 10}}",
         "canBeEmptyString": true
       }
     ]
